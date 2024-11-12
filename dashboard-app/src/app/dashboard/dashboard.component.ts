@@ -13,6 +13,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
+
 interface NavItem {
   id: string;
   label: string;
@@ -116,14 +117,14 @@ export class DashboardComponent implements OnInit {
     {
       name: 'Product A',
       category: 'Electronics',
-      image: '/assets/images/product-a.jpg',
+      image: 'assets/tshirt.jpeg',
       stock: 8,
       price: 299.99
     },
     {
       name: 'Product B',
       category: 'Accessories',
-      image: '/assets/images/product-b.jpg',
+      image: 'assets/hoodie.jpeg',
       stock: 15,
       price: 149.99
     }
