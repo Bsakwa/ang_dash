@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -35,12 +36,23 @@ interface Order {
   status: string;
 }
 
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  avatar: string;
+  role: string;
+  status: 'active' | 'inactive';
+}
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [
     CommonModule,
     RouterOutlet,
+    HttpClientModule,
     MatIconModule,
     MatButtonModule,
     MatBadgeModule,
@@ -67,7 +79,39 @@ export class DashboardComponent implements OnInit {
   currentDate = new Date();
   monthlySales = 125000;
   websiteTraffic = 45678;
-  
+
+  users: User[] = [
+    {
+      id: 'USR001',
+      name: 'John Smith',
+      email: 'john.smith@example.com',
+      phone: '+(254)71234567',
+      avatar: '',  // Avatar URL will be fetched dynamically
+      role: 'Administrator',
+      status: 'active'
+    },
+    {
+      id: 'USR002',
+      name: 'Sarah Johnson',
+      email: 'sarah.j@example.com',
+      phone: '+(254)71234567',
+      avatar: '',
+      role: 'Manager',
+      status: 'active'
+    },
+    {
+      id: 'USR003',
+      name: 'Michael Chen',
+      email: 'michael.c@example.com',
+      phone: '+(254)71234567',
+      avatar: '',
+      role: 'User',
+      status: 'inactive'
+    }
+  ];
+
+  userColumns = ['avatar', 'name', 'email', 'phone', 'role', 'status', 'actions'];
+
   products: Product[] = [
     {
       name: 'Product A',
@@ -104,13 +148,23 @@ export class DashboardComponent implements OnInit {
 
   orderColumns = ['id', 'client', 'date', 'amount', 'status', 'actions'];
 
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
-    // Initialize any necessary data or make API calls
+    this.fetchAvatars();
+  }
+
+  fetchAvatars(): void {
+    this.users.forEach((user, index) => {
+      this.http.get<any>('https://randomuser.me/api/').subscribe(response => {
+        const avatarUrl = response.results[0].picture.medium;
+        this.users[index].avatar = avatarUrl;
+      });
+    });
   }
 
   setActiveItem(itemId: string): void {
     this.activeItem = itemId;
   }
 }
+
